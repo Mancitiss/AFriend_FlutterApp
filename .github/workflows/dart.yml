@@ -71,4 +71,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: windows-executable
-          path: build/windows/runner/Release/a_friend_client.exe
+          path: ./build/windows/runner/Release/a_friend_client.exe
