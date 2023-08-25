@@ -27,12 +27,24 @@ jobs:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
       # - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
-
+      
+      - name: Calculate hash of pubspec.yaml
+        id: hash-pubspec
+        run: echo "::set-output name=hash::$(git log -1 --pretty=format:%H -- pubspec.yaml)"
+      
+      - name: Calculate hash of pubspec.lock
+        id: hash-pubspec-lock
+        run: echo "::set-output name=hash::$(git log -1 --pretty=format:%H -- pubspec.lock)"
+      
       - uses: subosito/flutter-action@v2
         with:
-         channel: 'beta'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-${{ runner.os }}-${{ steps.hash-pubspec.outputs.hash }}-${{ steps.hash-pubspec-lock.outputs.hash }}'
+          cache-path: '${{ runner.tool_cache }}/flutter/${{ runner.os }}-stable-${{ steps.hash-pubspec.outputs.hash }}-${{ steps.hash-pubspec-lock.outputs.hash }}'
+          architecture: x64
+          
       - run: flutter config --enable-windows-desktop
-      #- run: flutter build windows
         
       - name: Install dependencies
         run: flutter pub get
@@ -44,9 +56,14 @@ jobs:
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: flutter analyze
+        continue-on-error: false
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       - name: Run tests
         run: flutter test
+        continue-on-error: false
+
+      - name: build project
+        run: flutter build windows
