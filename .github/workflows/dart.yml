@@ -27,21 +27,20 @@ jobs:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
       # - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
-      
       - name: Calculate hash of pubspec.yaml
         id: hash-pubspec
-        run: echo "::set-output name=hash::$(git log -1 --pretty=format:%H -- pubspec.yaml)"
-      
+        run: echo "HASH_PUBSPEC=$(git log -1 --pretty=format:%H -- pubspec.yaml)" >> $GITHUB_OUTPUT
+    
       - name: Calculate hash of pubspec.lock
         id: hash-pubspec-lock
-        run: echo "::set-output name=hash::$(git log -1 --pretty=format:%H -- pubspec.lock)"
+        run: echo "HASH_PUBSPEC_LOCK=$(git log -1 --pretty=format:%H -- pubspec.lock)" >> $GITHUB_OUTPUT
       
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
-          cache-key: 'flutter-${{ runner.os }}-${{ steps.hash-pubspec.outputs.hash }}-${{ steps.hash-pubspec-lock.outputs.hash }}'
-          cache-path: '${{ runner.tool_cache }}/flutter/${{ runner.os }}-stable-${{ steps.hash-pubspec.outputs.hash }}-${{ steps.hash-pubspec-lock.outputs.hash }}'
+          cache-key: 'flutter-${{ runner.os }}-${{ env.HASH_PUBSPEC }}-${{ env.HASH_PUBSPEC_LOCK }}'
+          cache-path: '${{ runner.tool_cache }}/flutter/${{ runner.os }}-stable-${{ env.HASH_PUBSPEC }}-${{ env.HASH_PUBSPEC_LOCK }}'
           architecture: x64
           
       - run: flutter config --enable-windows-desktop
