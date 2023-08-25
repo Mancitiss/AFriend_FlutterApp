@@ -1,0 +1,74 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Dart
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    defaults:
+        run:
+          working-directory: a_friend_client
+          
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Note: This workflow uses the latest stable version of the Dart SDK.
+      # You can specify other versions if desired, see documentation here:
+      # https://github.com/dart-lang/setup-dart/blob/main/README.md
+      # - uses: dart-lang/setup-dart@v1
+      # - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - name: Calculate hash of pubspec.yaml
+        id: hash-pubspec
+        run: echo "HASH_PUBSPEC=$(git log -1 --pretty=format:%H -- pubspec.yaml)" >> $GITHUB_OUTPUT
+    
+      - name: Calculate hash of pubspec.lock
+        id: hash-pubspec-lock
+        run: echo "HASH_PUBSPEC_LOCK=$(git log -1 --pretty=format:%H -- pubspec.lock)" >> $GITHUB_OUTPUT
+      
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-${{ runner.os }}-${{ env.HASH_PUBSPEC }}-${{ env.HASH_PUBSPEC_LOCK }}'
+          cache-path: '${{ runner.tool_cache }}/flutter/${{ runner.os }}-stable-${{ env.HASH_PUBSPEC }}-${{ env.HASH_PUBSPEC_LOCK }}'
+          architecture: x64
+          
+      - run: flutter config --enable-windows-desktop
+        
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Uncomment this step to verify the use of 'dart format' on each commit.
+      # - name: Verify formatting
+      #   run: dart format --output=none --set-exit-if-changed .
+
+      # Consider passing '--fatal-infos' for slightly stricter analysis.
+      - name: Analyze project source
+        run: flutter analyze
+        continue-on-error: false
+
+      # Your project will need to have tests in test/ and a dependency on
+      # package:test for this step to succeed. Note that Flutter projects will
+      # want to change this to 'flutter test'.
+      - name: Run tests
+        run: flutter test
+        continue-on-error: false
+
+      - name: build project
+        run: flutter build windows
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-executable
+          path: a_friend_client/build/windows/runner/Release/a_friend_client.exe
