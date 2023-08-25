@@ -68,7 +68,7 @@ jobs:
         run: flutter build windows
         
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows-executable
           path: a_friend_client/build/windows/runner/Release/a_friend_client.exe
