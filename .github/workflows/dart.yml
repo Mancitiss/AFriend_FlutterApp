@@ -66,21 +66,9 @@ jobs:
 
       - name: build project
         run: flutter build windows
-
-      - name: List contents of build directory
-        run: ls -l ./build/windows/runner/Release 
-        
-      - name: List contents of build directory 2
-        run: ls -l build/windows/runner/Release
-        
-      - name: List contents of build directory 3
-        run: ls -l build\windows\runner\Release
-
-      - name: List contents of build directory 4
-        run: ls -l .\build\windows\runner\Release
         
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
           name: windows-executable
-          path: ./build/windows/runner/Release/a_friend_client.exe
+          path: a_friend_client/build/windows/runner/Release/a_friend_client.exe
