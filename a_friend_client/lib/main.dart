@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:a_friend_client/services/VersionManager.dart';
+import 'package:a_friend_client/services/version_manager.dart';
+import 'package:a_friend_client/pages/login_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ Future<void> main() async {
       if (kDebugMode) {
         print('A Friend, version ${VersionManager.getVersion()}');
       }
-      runApp(const MyApp());
+      runApp(const LoginScreen());
     }
   } catch (e) {
     if (kDebugMode) {

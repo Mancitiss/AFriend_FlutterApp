@@ -61,7 +61,7 @@ class VersionManager{
       
     } catch (e) {
       if (kDebugMode) {
-        print(e.toString());
+        print("error:$e");
       }
       return false;
     }
