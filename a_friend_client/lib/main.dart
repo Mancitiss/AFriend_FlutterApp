@@ -1,7 +1,30 @@
+import 'package:a_friend_client/services/VersionManager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
+
+Future<void> main() async {
+  if (kDebugMode) {
+    print('Running');
+  }
+  try {
+    bool newVersion = await VersionManager.checkNewVersion();
+    
+    // If there is a new version, download and launch it.
+    if (newVersion) {
+      VersionManager.downloadNewVersion();
+    } else {
+      // If there is no new version, launch the application.
+      if (kDebugMode) {
+        print('A Friend, version ${VersionManager.getVersion()}');
+      }
+      runApp(const MyApp());
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print(e.toString());
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -64,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
+      /* */
       _counter++;
     });
   }
