@@ -11,9 +11,10 @@ Future<void> main() async {
     print('Running');
   }
   try {
-    bool newVersion = await VersionManager.checkNewVersion();
-    
+    //bool newVersion = await VersionManager.checkNewVersion();
+    bool newVersion = false;
     // If there is a new version, download and launch it.
+    // ignore: dead_code
     if (newVersion) {
       VersionManager.downloadNewVersion();
     } else {
