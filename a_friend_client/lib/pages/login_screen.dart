@@ -1,224 +1,240 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+import 'loggin_model.dart';
+export 'loggin_model.dart';
+
+class LogginWidget extends StatefulWidget {
+  const LogginWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
-      ),
-      home: Scaffold(
-        body: ListView(children: const [
-          LoginPage(),
-        ]),
-      ),
-    );
-  }
+  // ignore: library_private_types_in_public_api
+  _LogginWidgetState createState() => _LogginWidgetState();
 }
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class _LogginWidgetState extends State<LogginWidget> {
+  late LogginModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = LogginModel();
+    _model.initState(context);
+    _model.txtPasswordController ??= TextEditingController();
+    _model.txtUserNameController ??= TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 500,
-          height: 700,
-          clipBehavior: Clip.antiAlias,
-          decoration: ShapeDecoration(
-            color: const Color(0xFF9CC9A0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                left: 92,
-                top: 350,
-                child: Container(
-                  width: 300,
-                  height: 50,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFFD6B6B6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0xD13E5A41),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 92,
-                top: 235,
-                child: Container(
-                  width: 300,
-                  height: 50,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFFD6B6B6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0xD83F5A41),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 92,
-                top: 188,
-                child: SizedBox(
-                  width: 108,
-                  height: 27,
-                  child: Text(
-                    'User Name\n',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 92,
-                top: 311,
-                child: SizedBox(
-                  width: 108,
-                  height: 27,
-                  child: Text(
-                    'Password\n',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 404,
-                top: 361,
-                child: Container(
-                  width: 35,
-                  height: 29,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFF735F5F),
-                    shape: OvalBorder(),
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 121,
-                top: 69,
-                child: SizedBox(
-                  width: 318,
-                  height: 61,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: const Color(0xFF9CC9A0),
+        body: SafeArea(
+          top: true,
+          child: Align(
+            alignment: const AlignmentDirectional(0, -1),
+            child: Stack(
+              children: [
+                const Align(
+                  alignment: AlignmentDirectional(0, -0.8),
                   child: Text(
                     'LOG IN ACCOUNT',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 30,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.50,
+                  ),
+                ),
+                Align(
+                  alignment: const AlignmentDirectional(0, -0.1),
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                    child: SizedBox(
+                      width: 300,
+                      child: TextFormField(
+                        controller: _model.txtPasswordController,
+                        autofocus: true,
+                        obscureText: true,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0x93064F0C),
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0x77002BC5),
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        validator: _model.txtPasswordControllerValidator,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                left: 196,
-                top: 504,
-                child: Container(
-                  width: 107,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFF99A9FA),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                Align(
+                  alignment: const AlignmentDirectional(0, -0.45),
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                    child: SizedBox(
+                      width: 300,
+                      child: TextFormField(
+                        controller: _model.txtUserNameController,
+                        autofocus: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          hintText: 'User Name',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0x93064F0C),
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0x77002BC5),
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        validator: _model.txtUserNameControllerValidator,
+                      ),
                     ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x9E242E68),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
                   ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Login',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(0xFF191616),
-                          fontSize: 18,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0.56,
+                ),
+                Align(
+                  alignment: const AlignmentDirectional(0, 0.4),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      context.pushNamed('AFriendHome');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(120, 50),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                      backgroundColor: const Color(0xB45C84F2),
+                      textStyle: const TextStyle(
+                        fontFamily: 'Readex Pro',
+                        color: Colors.white,
+                      ),
+                      elevation: 3,
+                      side: const BorderSide(
+                        color: Colors.transparent,
+                        width: 1,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: const Text('Log In'),
+                  ),
+                ),
+                Align(
+                  alignment: const AlignmentDirectional(0, 0.14),
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      context.pushNamed('ForgotPassword');
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Forgot Password?',
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              color: Colors.black.withOpacity(0.54),
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          )
+                        ],
+                        style: const TextStyle(
+                          fontFamily: 'Readex Pro',
+                          color: Color(0x1C0CC71C),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-              const Positioned(
-                left: 187,
-                top: 435,
-                child: Text(
-                  'Forgot password?',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    // textDecoration: TextDecoration.underline,
-                    letterSpacing: 0.24,
+                Align(
+                  alignment: const AlignmentDirectional(0, 0.6),
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      context.pushNamed('SignUp');
+                    },
+                    child: RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Sign up here!',
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              color: Color(0x86000000),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
+                        style: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          color: Color(0x1C0CC71C),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              const Positioned(
-                left: 206,
-                top: 579,
-                child: Text(
-                  'Sign up here!',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    // textDecoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
